@@ -12,7 +12,7 @@ def main():
     address_data = request.json()
 
     if 'erro' not in address_data:
-        print('==> CEP ENCONTRADO <==')
+        print('==> Buscando moeda... <==')
         print('A moeda foi {}'.format(coin_input))
         print(f'{address_data}')
 
@@ -21,3 +21,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+    
+    ### DIFICULDADE PARA PUXAR SÒ O NECESSÀRIO NO JSON >> PRECISO PENSAR UMA FORMA DE PUXAR SOMENTE O ID, PriceUSD, Name e ID.
