@@ -15,6 +15,18 @@ def main():
         print('==> Buscando moeda... <==')
         print('A moeda foi {}'.format(coin_input))
         print(f'{address_data}')
+        
+        
+        def Coleta():
+        infos = address_data
+        ret = jsonpickle.encode(infos)
+        print(ret)
+        with open('criptos.json','w') as arquivo:
+            ret = jsonpickle.encode(infos)
+            arquivo.write(ret)
+    Coleta()
+
+
 
 
 
