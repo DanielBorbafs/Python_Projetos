@@ -1,0 +1,3 @@
+Criar um banco de dados com uma modelagem de empresa startup, irá armazenar dados de todos os colaboradores, utilizarei o banco de dados mysql juntamente com python, 
+a ideia principal é utilizar o python como um facilitador de inserção de dados nas tabelas do banco, ou seja, resumidamente.. vou tentar criar um modelo com interface
+gráfica, que só bastara o usuário preencher que todas informações irão direto para o banco de dados.
