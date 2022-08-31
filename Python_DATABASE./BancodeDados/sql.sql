@@ -1,3 +1,7 @@
+
+
+/* Criando primeiro escopo de colaboradores onde contém apenas as informações básicas*/
+
 create table colaboradores (
 matricula int not null auto_increment,
 nome varchar(30) not null,
