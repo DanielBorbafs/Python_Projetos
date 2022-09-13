@@ -1,6 +1,7 @@
 from tkinter import *
- # Importar as cores
 
+from tkinter import ttk
+ # Importar as cores
 cor1 = '#2F4F4F' # Bg
 cor2 = '#B0C4DE' # Frames
 cor3 = '#20B2AA' # Botoes
@@ -15,6 +16,7 @@ class Application():
         self.tela()
         self.frames_da_tela()
         self.criando_botoes()
+        self.lista_frame2()
         root.mainloop()
 
     def tela(self):
@@ -62,11 +64,29 @@ class Application():
         self.telefone_entry = Entry(self.frame_1)
         self.telefone_entry.place(relx=0.05, rely=0.7, relwidth=0.4)
 
+
         self.lb_cidade= Label(self.frame_1, text="Cidade", bg=cor2, fg=cor1, font=('verdana',8, 'bold'))
         self.lb_cidade.place(relx=0.5, rely=0.6)
 
         self.cidade_entry = Entry(self.frame_1)
         self.cidade_entry.place(relx=0.5, rely=0.7, relwidth=0.4)
+    def lista_frame2(self):
+        self.listaCli = ttk.Treeview(self.frame_2, height= 3, column=("col1", "col2", "col3", "col4"))
+        self.listaCli.heading("#0", text="")
+        self.listaCli.heading("#1", text="Codigo")
+        self.listaCli.heading("#2", text="Nome")
+        self.listaCli.heading("#3", text="Telefone")
+        self.listaCli.heading("#4", text="Cidade")
 
+        self.listaCli.column("#0", width=1)
+        self.listaCli.column("#1", width=50)
+        self.listaCli.column("#2", width=200)
+        self.listaCli.column("#3", width=125)
+        self.listaCli.column("#4", width=125)
 
+        self.listaCli.place(relx=0.01, rely=0.1, relwidth=0.95, relheight=0.85)
+
+        self.scroolLista = Scrollbar(self.frame_2, orient='vertical')
+        self.listaCli.configure(yscroll=self.scroolLista.set)
+        self.scroolLista.place(relx=0.96, rely=0.1, relwidth=0.04, relheight= 0.85)
 Application()
