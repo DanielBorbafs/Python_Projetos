@@ -1,6 +1,8 @@
 from tkinter import *
-
 from tkinter import ttk
+import sqlite3
+
+
  # Importar as cores
 cor1 = '#2F4F4F' # Bg
 cor2 = '#B0C4DE' # Frames
@@ -10,13 +12,40 @@ cor5 = '#00000' # Preto
 
 root = Tk()
 
-class Application():
+class Funcs():
+    def limpa_tela(self):
+        self.codigo_entry.delete(0, END)
+        self.nome_entry.delete(0, END)
+        self.telefone_entry.delete(0, END)
+        self.cidade_entry.delete(0, END)
+    def conecta_bd(self):
+        self.conn = sqlite3.connect("clientes.bd")
+        self.cursor = self.conn.cursor()
+    def desconecta_bd(self):
+        self.conn.close()
+    def montaTabelas(self):
+        self.conecta_bd(); print("Conectando ao Banco de Dados")
+        #criar tabela
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS clientes(
+                 cod INTEGER PRIMARY KEY,
+                 nome_cliente CHAR(40) NOT NULL,
+                 telefone INTEGER(20),
+                 cidade CHAR(40)
+            );
+        """)
+        self.conn.commit(); print("Banco de dados Criado")
+        self.desconecta_bd()
+
+
+class Application(Funcs):
     def __init__(self):
         self.root = root
         self.tela()
         self.frames_da_tela()
         self.criando_botoes()
         self.lista_frame2()
+        self.montaTabelas()
         root.mainloop()
 
     def tela(self):
@@ -35,16 +64,16 @@ class Application():
                              highlightbackground=cor4, highlightthickness=2.6)
         self.frame_2.place(relx=0.02, rely=0.5, relwidth=0.96, relheight=0.46)
     def criando_botoes(self):
-        self.bt_limpar= Button(self.frame_1, text="Limpar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
+        self.bt_limpar= Button(self.frame_1, text="Limpar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.limpa_tela)
         self.bt_limpar.place(relx= 0.2, rely=0.1, relwidth=0.1, relheight= 0.15,)
-        self.bt_limpar = Button(self.frame_1, text="Buscar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
-        self.bt_limpar.place(relx=0.31, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.bt_limpar = Button(self.frame_1, text="Novo", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
-        self.bt_limpar.place(relx=0.6, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.bt_limpar = Button(self.frame_1, text="Alterar",bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
-        self.bt_limpar.place(relx=0.7, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.bt_limpar = Button(self.frame_1, text="Apagar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
-        self.bt_limpar.place(relx=0.8, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_buscar = Button(self.frame_1, text="Buscar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
+        self.bt_buscar.place(relx=0.31, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_novo = Button(self.frame_1, text="Novo", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
+        self.bt_novo.place(relx=0.6, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_alterar = Button(self.frame_1, text="Alterar",bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
+        self.bt_alterar.place(relx=0.7, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_apagar = Button(self.frame_1, text="Apagar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
+        self.bt_apagar.place(relx=0.8, rely=0.1, relwidth=0.1, relheight=0.15)
 
         self.lb_codigo = Label(self.frame_1, text = "Código", bg=cor2, fg=cor1, font=('verdana', 9 , 'bold'))
         self.lb_codigo.place(relx= 0.05, rely= 0.05)
