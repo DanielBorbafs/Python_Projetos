@@ -36,6 +36,28 @@ class Funcs():
         """)
         self.conn.commit(); print("Banco de dados Criado")
         self.desconecta_bd()
+    def add_client(self):
+        self.codigo = self.codigo_entry.get()
+        self.nome = self.nome_entry.get()
+        self.telefone = self.telefone_entry.get()
+        self.cidade = self.cidade_entry.get()
+        self.conecta_bd()
+        
+        
+        self.cursor.execute(""" INSERT INTO clientes (nome_cliente,telefone, cidade)
+             VALUES (?, ?, ?) """, (self.nome, self.telefone, self.cidade))
+        self.conn.commit()
+        self.desconecta_bd()
+        self.select_lista()
+        self.limpa_tela()
+    def select_lista(self):
+        self.listaCli.delete(*self.listaCli.get_children())
+        self.conecta_bd()
+        lista = self.cursor.execute("""SELECT cod, nome_cliente, telefone, cidade FROM clientes
+            ORDER BY nome_cliente ASC; """)
+        for i in lista:
+            self.listaCli.insert("", END, values=1)
+        self.desconecta_bd()
 
 
 class Application(Funcs):
@@ -46,6 +68,7 @@ class Application(Funcs):
         self.criando_botoes()
         self.lista_frame2()
         self.montaTabelas()
+        self.select_lista()
         root.mainloop()
 
     def tela(self):
@@ -68,7 +91,7 @@ class Application(Funcs):
         self.bt_limpar.place(relx= 0.2, rely=0.1, relwidth=0.1, relheight= 0.15,)
         self.bt_buscar = Button(self.frame_1, text="Buscar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
         self.bt_buscar.place(relx=0.31, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.bt_novo = Button(self.frame_1, text="Novo", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
+        self.bt_novo = Button(self.frame_1, text="Novo", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.add_client)
         self.bt_novo.place(relx=0.6, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_alterar = Button(self.frame_1, text="Alterar",bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
         self.bt_alterar.place(relx=0.7, rely=0.1, relwidth=0.1, relheight=0.15)
