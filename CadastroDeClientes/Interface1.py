@@ -36,14 +36,13 @@ class Funcs():
         """)
         self.conn.commit(); print("Banco de dados Criado")
         self.desconecta_bd()
-    def add_client(self):
+    def variaveis(self):
         self.codigo = self.codigo_entry.get()
         self.nome = self.nome_entry.get()
         self.telefone = self.telefone_entry.get()
         self.cidade = self.cidade_entry.get()
-        self.conecta_bd()
-        
-        
+    def add_client(self):
+        self.variaveis()
         self.cursor.execute(""" INSERT INTO clientes (nome_cliente,telefone, cidade)
              VALUES (?, ?, ?) """, (self.nome, self.telefone, self.cidade))
         self.conn.commit()
@@ -56,8 +55,26 @@ class Funcs():
         lista = self.cursor.execute("""SELECT cod, nome_cliente, telefone, cidade FROM clientes
             ORDER BY nome_cliente ASC; """)
         for i in lista:
-            self.listaCli.insert("", END, values=1)
+            self.listaCli.insert("", END, values=i)
         self.desconecta_bd()
+    def OnDoubleClick(self, event):
+        self.limpa_tela()
+        self.listaCli.selection()
+
+        for n in self.listaCli.selection():
+            col1, col2, col3, col4 = self.listaCli.item(n, 'values')
+            self.codigo_entry.insert(END, col1)
+            self.nome_entry.insert(END, col2)
+            self.telefone_entry.insert(END, col3)
+            self.cidade_entry.insert(END, col4)
+    def deleta_cliente(self):
+        self.variaveis()
+        self.conecta_bd()
+        self.cursor.execute("""DELETE FROM clientes WHERE cod = ?""", (self.codigo))
+        self.conn.commit()
+        self.desconecta_bd()
+        self.limpa_tela()
+        self.select_lista()
 
 
 class Application(Funcs):
@@ -95,7 +112,7 @@ class Application(Funcs):
         self.bt_novo.place(relx=0.6, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_alterar = Button(self.frame_1, text="Alterar",bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
         self.bt_alterar.place(relx=0.7, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.bt_apagar = Button(self.frame_1, text="Apagar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
+        self.bt_apagar = Button(self.frame_1, text="Apagar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.deleta_cliente)
         self.bt_apagar.place(relx=0.8, rely=0.1, relwidth=0.1, relheight=0.15)
 
         self.lb_codigo = Label(self.frame_1, text = "Código", bg=cor2, fg=cor1, font=('verdana', 9 , 'bold'))
@@ -141,4 +158,6 @@ class Application(Funcs):
         self.scroolLista = Scrollbar(self.frame_2, orient='vertical')
         self.listaCli.configure(yscroll=self.scroolLista.set)
         self.scroolLista.place(relx=0.96, rely=0.1, relwidth=0.04, relheight= 0.85)
+        self.listaCli.bind("<Double-1>", self.OnDoubleClick)
+
 Application()
