@@ -43,6 +43,7 @@ class Funcs():
         self.cidade = self.cidade_entry.get()
     def add_client(self):
         self.variaveis()
+        self.conecta_bd()
         self.cursor.execute(""" INSERT INTO clientes (nome_cliente,telefone, cidade)
              VALUES (?, ?, ?) """, (self.nome, self.telefone, self.cidade))
         self.conn.commit()
@@ -70,11 +71,20 @@ class Funcs():
     def deleta_cliente(self):
         self.variaveis()
         self.conecta_bd()
-        self.cursor.execute("""DELETE FROM clientes WHERE cod = ?""", (self.codigo))
+        self.cursor.execute("""DELETE FROM clientes WHERE cod = ?""", (self.codigo,))
         self.conn.commit()
         self.desconecta_bd()
         self.limpa_tela()
         self.select_lista()
+    def altera_cliente(self):
+        self.variaveis()
+        self.conecta_bd()
+        self.cursor.execute(""" UPDATE clientes SET nome_cliente = ?, telefone = ?, cidade = ? 
+            WHERE cod = ? """, (self.nome, self.telefone, self.cidade, self.codigo))
+        self.conn.commit()
+        self.desconecta_bd()
+        self.select_lista()
+        self.limpa_tela()
 
 
 class Application(Funcs):
@@ -110,7 +120,7 @@ class Application(Funcs):
         self.bt_buscar.place(relx=0.31, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_novo = Button(self.frame_1, text="Novo", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.add_client)
         self.bt_novo.place(relx=0.6, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.bt_alterar = Button(self.frame_1, text="Alterar",bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
+        self.bt_alterar = Button(self.frame_1, text="Alterar",bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.altera_cliente)
         self.bt_alterar.place(relx=0.7, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_apagar = Button(self.frame_1, text="Apagar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.deleta_cliente)
         self.bt_apagar.place(relx=0.8, rely=0.1, relwidth=0.1, relheight=0.15)
