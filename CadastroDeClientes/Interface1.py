@@ -7,7 +7,7 @@ import sqlite3
 cor1 = '#2F4F4F' # Bg
 cor2 = '#B0C4DE' # Frames
 cor3 = '#20B2AA' # Botoes
-cor4 = '#F8F8FF' # Branco
+cor4 = '#F8F8FF' # Branc
 cor5 = '#00000' # Preto
 
 root = Tk()
