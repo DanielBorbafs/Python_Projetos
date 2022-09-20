@@ -130,7 +130,23 @@ class Funcs():
         self.desconecta_bd()
         self.select_lista()
         self.limpa_tela()
+    def busca_cliente(self):
+        self.conecta_bd()
+        self.listaCli.delete(*self.listaCli.get_children())
 
+
+        self.nome_entry.insert(END, '%')
+        nome = self.nome_entry.get()
+        self.cursor.execute(
+            """ SELECT cod, nome_cliente, telefone, cidade FROM clientes 
+            WHERE nome_cliente LIKE '%s' ORDER BY nome_cliente ASC""" % nome)
+        buscanomeCli = self.cursor.fetchall()
+        for i in buscanomeCli:
+            self.listaCli.insert("", END, values=i)
+        self.limpa_tela()
+        self.desconecta_bd()
+
+        self.desconecta_bd()
 
 class Application(Funcs, Relatorios):
     def __init__(self):
@@ -162,7 +178,7 @@ class Application(Funcs, Relatorios):
     def criando_botoes(self):
         self.bt_limpar= Button(self.frame_1, text="Limpar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.limpa_tela)
         self.bt_limpar.place(relx= 0.2, rely=0.1, relwidth=0.1, relheight= 0.15,)
-        self.bt_buscar = Button(self.frame_1, text="Buscar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'))
+        self.bt_buscar = Button(self.frame_1, text="Buscar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.busca_cliente)
         self.bt_buscar.place(relx=0.31, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_novo = Button(self.frame_1, text="Novo", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.add_client)
         self.bt_novo.place(relx=0.6, rely=0.1, relwidth=0.1, relheight=0.15)
