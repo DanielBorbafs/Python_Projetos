@@ -9,6 +9,8 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import SimpleDocTemplate
 from reportlab import *
 import webbrowser
+from PIL import *
+
 
 
 
@@ -176,7 +178,10 @@ class Application(Funcs, Relatorios):
                              highlightbackground=cor4, highlightthickness=2.6)
         self.frame_2.place(relx=0.02, rely=0.5, relwidth=0.96, relheight=0.46)
     def criando_botoes(self):
-        self.bt_limpar= Button(self.frame_1, text="Limpar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.limpa_tela)
+        self.canvas_bt = Canvas(self.frame_1, bd=0, bg=cor2, highlightbackground = 'gray', highlightthickness=2.6)
+        self.canvas_bt.place(relx=0.20, rely=0.09, relwidth=0.22, relheight=0.17)
+
+        self.bt_limpar= Button(self.frame_1, text="Limpar", bd=2.5, bg=cor1, fg='white', activebackground=cor2, activeforeground="black", font=('verdana',8, 'bold'), command=self.limpa_tela)
         self.bt_limpar.place(relx= 0.2, rely=0.1, relwidth=0.1, relheight= 0.15,)
         self.bt_buscar = Button(self.frame_1, text="Buscar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.busca_cliente)
         self.bt_buscar.place(relx=0.31, rely=0.1, relwidth=0.1, relheight=0.15)
@@ -186,9 +191,15 @@ class Application(Funcs, Relatorios):
         self.bt_alterar.place(relx=0.7, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_apagar = Button(self.frame_1, text="Apagar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.deleta_cliente)
         self.bt_apagar.place(relx=0.8, rely=0.1, relwidth=0.1, relheight=0.15)
-
-        self.lb_codigo = Label(self.frame_1, text = "Código", bg=cor2, fg=cor1, font=('verdana', 9 , 'bold'))
-        self.lb_codigo.place(relx= 0.05, rely= 0.05)
+        self.imgSuport = PhotoImage(file = "botao-imagem-animada-0519.gif")
+        self.imgNovo = self.imgNovo.subsample(2, 2)
+        self.bt_teste =ttk.Button(self.frame_1, text='suport')
+        self.bt_teste.place(relx=0.8, rely=0.9, relwidth=0.2, relheight=0.15)
+        self.bt_teste.config(image=self.imgNovo)
+        self.style = ttk.Style()
+        self.style.configure("BW.TButton", relwidth=1, relheight=1, foreground="gray", borderwidth=0, bordercolor = 'gray', background=cor2, image= self.imgNovo)
+        self.lb_codigo = Label(self.frame_1, text="Código", bg=cor2, fg=cor1, font=('verdana', 9 , 'bold'))
+        self.lb_codigo.place(relx=0.05, rely=0.05)
 
         self.codigo_entry = Entry(self.frame_1)
         self.codigo_entry.place(relx=0.05, rely=0.15, relwidth=0.08)
