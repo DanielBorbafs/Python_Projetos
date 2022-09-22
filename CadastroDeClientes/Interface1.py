@@ -191,13 +191,7 @@ class Application(Funcs, Relatorios):
         self.bt_alterar.place(relx=0.7, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_apagar = Button(self.frame_1, text="Apagar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.deleta_cliente)
         self.bt_apagar.place(relx=0.8, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.imgSuport = PhotoImage(file = "botao-imagem-animada-0519.gif")
-        self.imgNovo = self.imgNovo.subsample(2, 2)
-        self.bt_teste =ttk.Button(self.frame_1, text='suport')
-        self.bt_teste.place(relx=0.8, rely=0.9, relwidth=0.2, relheight=0.15)
-        self.bt_teste.config(image=self.imgNovo)
-        self.style = ttk.Style()
-        self.style.configure("BW.TButton", relwidth=1, relheight=1, foreground="gray", borderwidth=0, bordercolor = 'gray', background=cor2, image= self.imgNovo)
+     
         self.lb_codigo = Label(self.frame_1, text="Código", bg=cor2, fg=cor1, font=('verdana', 9 , 'bold'))
         self.lb_codigo.place(relx=0.05, rely=0.05)
 
