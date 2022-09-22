@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import sqlite3
-
+from tkinter import messagebox
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.pdfbase import pdfmetrics
@@ -93,13 +93,17 @@ class Funcs():
 
     def add_client(self):
         self.variaveis()
-        self.conecta_bd()
-        self.cursor.execute(""" INSERT INTO clientes (nome_cliente,telefone, cidade)
-             VALUES (?, ?, ?) """, (self.nome, self.telefone, self.cidade))
-        self.conn.commit()
-        self.desconecta_bd()
-        self.select_lista()
-        self.limpa_tela()
+        if self.nome_entry.get() == "":
+            msg ="Preencha todos os campos!"
+            messagebox.showinfo("Cadastro de clieintes - Aviso!", msg)
+        else:
+            self.conecta_bd()
+            self.cursor.execute(""" INSERT INTO clientes (nome_cliente,telefone, cidade)
+                 VALUES (?, ?, ?) """, (self.nome, self.telefone, self.cidade))
+            self.conn.commit()
+            self.desconecta_bd()
+            self.select_lista()
+            self.limpa_tela()
 
     def select_lista(self):
         self.listaCli.delete(*self.listaCli.get_children())
@@ -194,6 +198,15 @@ class Application(Funcs, Relatorios):
 
         self.aba1.configure(background=cor2)
         self.aba2.configure(background="lightgray")
+
+        ##Drop Down Button
+        self.Tipvar = StringVar(self.aba2)
+        self.TipV = ("Solteiro(a)", "Casado(a)", "Divorciado(a)", "Viuvo(a)")
+        self.Tipvar.set("Solteiro(a)")
+        self.popupMenu = OptionMenu(self.aba2, self.Tipvar, *self.TipV)
+        self.popupMenu.place(relx= 0.1, rely= 0.1, relwidth= 0.2, relheight=0.2)
+        self.estado_civil =  self.Tipvar.get()
+        print(self.estado_civil)
 
         self.abas.add(self.aba1, text= "aba 1")
         self.abas.add(self.aba2, text= "aba 2")
