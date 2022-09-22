@@ -11,22 +11,20 @@ from reportlab import *
 import webbrowser
 from PIL import *
 
-
-
-
-
- # Importar as cores
-cor1 = '#2F4F4F' # Bg
-cor2 = '#B0C4DE' # Frames
-cor3 = '#20B2AA' # Botoes
-cor4 = '#F8F8FF' # Branc
-cor5 = '#00000' # Preto
+# Importar as cores
+cor1 = '#2F4F4F'  # Bg
+cor2 = '#B0C4DE'  # Frames
+cor3 = '#20B2AA'  # Botoes
+cor4 = '#F8F8FF'  # Branc
+cor5 = '#00000'  # Preto
 
 root = Tk()
+
 
 class Relatorios():
     def printCliente(self):
         webbrowser.open("cliente.pdf")
+
     def gerarelatoriocliente(self):
         self.c = canvas.Canvas("cliente.pdf")
 
@@ -52,8 +50,6 @@ class Relatorios():
 
         self.c.rect(20, 590, 550, 130, fill=False, stroke=True)
 
-
-
         self.c.showPage()
         self.c.save()
         self.printCliente()
@@ -65,14 +61,18 @@ class Funcs():
         self.nome_entry.delete(0, END)
         self.telefone_entry.delete(0, END)
         self.cidade_entry.delete(0, END)
+
     def conecta_bd(self):
         self.conn = sqlite3.connect("clientes.bd")
         self.cursor = self.conn.cursor()
+
     def desconecta_bd(self):
         self.conn.close()
+
     def montaTabelas(self):
-        self.conecta_bd(); print("Conectando ao Banco de Dados")
-        #criar tabela
+        self.conecta_bd();
+        print("Conectando ao Banco de Dados")
+        # criar tabela
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS clientes(
                  cod INTEGER PRIMARY KEY,
@@ -81,13 +81,16 @@ class Funcs():
                  cidade CHAR(40)
             );
         """)
-        self.conn.commit(); print("Banco de dados Criado")
+        self.conn.commit();
+        print("Banco de dados Criado")
         self.desconecta_bd()
+
     def variaveis(self):
         self.codigo = self.codigo_entry.get()
         self.nome = self.nome_entry.get()
         self.telefone = self.telefone_entry.get()
         self.cidade = self.cidade_entry.get()
+
     def add_client(self):
         self.variaveis()
         self.conecta_bd()
@@ -97,6 +100,7 @@ class Funcs():
         self.desconecta_bd()
         self.select_lista()
         self.limpa_tela()
+
     def select_lista(self):
         self.listaCli.delete(*self.listaCli.get_children())
         self.conecta_bd()
@@ -105,6 +109,7 @@ class Funcs():
         for i in lista:
             self.listaCli.insert("", END, values=i)
         self.desconecta_bd()
+
     def OnDoubleClick(self, event):
         self.limpa_tela()
         self.listaCli.selection()
@@ -115,6 +120,7 @@ class Funcs():
             self.nome_entry.insert(END, col2)
             self.telefone_entry.insert(END, col3)
             self.cidade_entry.insert(END, col4)
+
     def deleta_cliente(self):
         self.variaveis()
         self.conecta_bd()
@@ -123,6 +129,7 @@ class Funcs():
         self.desconecta_bd()
         self.limpa_tela()
         self.select_lista()
+
     def altera_cliente(self):
         self.variaveis()
         self.conecta_bd()
@@ -132,10 +139,10 @@ class Funcs():
         self.desconecta_bd()
         self.select_lista()
         self.limpa_tela()
+
     def busca_cliente(self):
         self.conecta_bd()
         self.listaCli.delete(*self.listaCli.get_children())
-
 
         self.nome_entry.insert(END, '%')
         nome = self.nome_entry.get()
@@ -149,6 +156,7 @@ class Funcs():
         self.desconecta_bd()
 
         self.desconecta_bd()
+
 
 class Application(Funcs, Relatorios):
     def __init__(self):
@@ -164,60 +172,78 @@ class Application(Funcs, Relatorios):
 
     def tela(self):
         self.root.title("Cadastro de Clientes")
-        self.root.configure(bg= cor1)
+        self.root.configure(bg=cor1)
         self.root.geometry("700x500")
         self.root.resizable(True, True)
         self.root.maxsize(width=900, height=700)
-        self.root.minsize(width= 600, height=500)
+        self.root.minsize(width=600, height=500)
+
     def frames_da_tela(self):
-        self.frame_1 = Frame(self.root, bd = 4, bg=cor2,
+        self.frame_1 = Frame(self.root, bd=4, bg=cor2,
                              highlightbackground=cor4, highlightthickness=2.6)
-        self.frame_1.place(relx= 0.02 , rely= 0.02, relwidth=0.96, relheight=0.46)
+        self.frame_1.place(relx=0.02, rely=0.02, relwidth=0.96, relheight=0.46)
 
         self.frame_2 = Frame(self.root, bd=4, bg=cor2,
                              highlightbackground=cor4, highlightthickness=2.6)
         self.frame_2.place(relx=0.02, rely=0.5, relwidth=0.96, relheight=0.46)
+
     def criando_botoes(self):
-        self.canvas_bt = Canvas(self.frame_1, bd=0, bg=cor2, highlightbackground = 'gray', highlightthickness=2.6)
+        self.abas = ttk.Notebook(self.frame_1)
+        self.aba1 = Frame(self.abas)
+        self.aba2 = Frame(self.abas)
+
+        self.aba1.configure(background=cor2)
+        self.aba2.configure(background="lightgray")
+
+        self.abas.add(self.aba1, text= "aba 1")
+        self.abas.add(self.aba2, text= "aba 2")
+        self.abas.place(relx=0, rely=0, relwidth=0.98, relheight=0.98)
+
+        self.canvas_bt = Canvas(self.aba1, bd=0, bg=cor2, highlightbackground=cor2 , highlightthickness=2.6)
         self.canvas_bt.place(relx=0.20, rely=0.09, relwidth=0.22, relheight=0.17)
 
-        self.bt_limpar= Button(self.frame_1, text="Limpar", bd=2.5, bg=cor1, fg='white', activebackground=cor2, activeforeground="black", font=('verdana',8, 'bold'), command=self.limpa_tela)
-        self.bt_limpar.place(relx= 0.2, rely=0.1, relwidth=0.1, relheight= 0.15,)
-        self.bt_buscar = Button(self.frame_1, text="Buscar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.busca_cliente)
+        self.bt_limpar = Button(self.aba1, text="Limpar", bd=2.5, bg=cor1, fg='white', activebackground=cor2,
+                                activeforeground="black", font=('verdana', 8, 'bold'), command=self.limpa_tela)
+        self.bt_limpar.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.15, )
+        self.bt_buscar = Button(self.aba1, text="Buscar", bd=2.5, bg=cor1, fg='white', font=('verdana', 8, 'bold'),
+                                command=self.busca_cliente)
         self.bt_buscar.place(relx=0.31, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.bt_novo = Button(self.frame_1, text="Novo", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.add_client)
+        self.bt_novo = Button(self.aba1, text="Novo", bd=2.5, bg=cor1, fg='white', font=('verdana', 8, 'bold'),
+                              command=self.add_client)
         self.bt_novo.place(relx=0.6, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.bt_alterar = Button(self.frame_1, text="Alterar",bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.altera_cliente)
+        self.bt_alterar = Button(self.aba1, text="Alterar", bd=2.5, bg=cor1, fg='white', font=('verdana', 8, 'bold'),
+                                 command=self.altera_cliente)
         self.bt_alterar.place(relx=0.7, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.bt_apagar = Button(self.frame_1, text="Apagar", bd=2.5, bg=cor1, fg='white', font=('verdana',8, 'bold'), command=self.deleta_cliente)
+        self.bt_apagar = Button(self.aba1, text="Apagar", bd=2.5, bg=cor1, fg='white', font=('verdana', 8, 'bold'),
+                                command=self.deleta_cliente)
         self.bt_apagar.place(relx=0.8, rely=0.1, relwidth=0.1, relheight=0.15)
-     
-        self.lb_codigo = Label(self.frame_1, text="Código", bg=cor2, fg=cor1, font=('verdana', 9 , 'bold'))
+
+        self.lb_codigo = Label(self.aba1, text="Código", bg=cor2, fg=cor1, font=('verdana', 9, 'bold'))
         self.lb_codigo.place(relx=0.05, rely=0.05)
 
-        self.codigo_entry = Entry(self.frame_1)
+        self.codigo_entry = Entry(self.aba1)
         self.codigo_entry.place(relx=0.05, rely=0.15, relwidth=0.08)
 
-        self.lb_nome= Label(self.frame_1, text="Nome", bg=cor2, fg=cor1, font=('verdana', 9, 'bold'))
+        self.lb_nome = Label(self.aba1, text="Nome", bg=cor2, fg=cor1, font=('verdana', 9, 'bold'))
         self.lb_nome.place(relx=0.05, rely=0.35)
 
-        self.nome_entry = Entry(self.frame_1)
+        self.nome_entry = Entry(self.aba1)
         self.nome_entry.place(relx=0.05, rely=0.45, relwidth=0.7)
 
-        self.lb_telefone = Label(self.frame_1, text="Telefone", bg=cor2, fg=cor1, font=('verdana',8, 'bold'))
+        self.lb_telefone = Label(self.aba1, text="Telefone", bg=cor2, fg=cor1, font=('verdana', 8, 'bold'))
         self.lb_telefone.place(relx=0.05, rely=0.6)
 
-        self.telefone_entry = Entry(self.frame_1)
+        self.telefone_entry = Entry(self.aba1)
         self.telefone_entry.place(relx=0.05, rely=0.7, relwidth=0.4)
 
-
-        self.lb_cidade= Label(self.frame_1, text="Cidade", bg=cor2, fg=cor1, font=('verdana',8, 'bold'))
+        self.lb_cidade = Label(self.aba1, text="Cidade", bg=cor2, fg=cor1, font=('verdana', 8, 'bold'))
         self.lb_cidade.place(relx=0.5, rely=0.6)
 
-        self.cidade_entry = Entry(self.frame_1)
+        self.cidade_entry = Entry(self.aba1)
         self.cidade_entry.place(relx=0.5, rely=0.7, relwidth=0.4)
+
     def lista_frame2(self):
-        self.listaCli = ttk.Treeview(self.frame_2, height= 3, column=("col1", "col2", "col3", "col4"))
+        self.listaCli = ttk.Treeview(self.frame_2, height=3, column=("col1", "col2", "col3", "col4"))
         self.listaCli.heading("#0", text="")
         self.listaCli.heading("#1", text="Codigo")
         self.listaCli.heading("#2", text="Nome")
@@ -234,21 +260,24 @@ class Application(Funcs, Relatorios):
 
         self.scroolLista = Scrollbar(self.frame_2, orient='vertical')
         self.listaCli.configure(yscroll=self.scroolLista.set)
-        self.scroolLista.place(relx=0.96, rely=0.1, relwidth=0.04, relheight= 0.85)
+        self.scroolLista.place(relx=0.96, rely=0.1, relwidth=0.04, relheight=0.85)
         self.listaCli.bind("<Double-1>", self.OnDoubleClick)
+
     def Menus(self):
         menubar = Menu(self.root)
         self.root.config(menu=menubar)
         filemenu = Menu(menubar)
         filemenu2 = Menu(menubar)
+
         def Quit(): self.root.destroy()
 
         menubar.add_cascade(label="Opções", menu=filemenu)
-        menubar.add_cascade(label="Relatorios", menu= filemenu2)
+        menubar.add_cascade(label="Relatorios", menu=filemenu2)
 
-        filemenu.add_command(label="Sair", command= Quit)
-        filemenu2.add_command(label="Limpa Cliente", command= self.limpa_tela)
+        filemenu.add_command(label="Sair", command=Quit)
+        filemenu2.add_command(label="Limpa Cliente", command=self.limpa_tela)
 
         filemenu2.add_command(label="Ficha do Cliente", command=self.gerarelatoriocliente)
+
 
 Application()
