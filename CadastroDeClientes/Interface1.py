@@ -20,6 +20,42 @@ cor5 = '#00000'  # Preto
 
 root = Tk()
 
+class Validadores:
+    def validate_entry2(self, text):
+        if text == "": return True
+        try:
+            value = int (text)
+        except ValueError:
+            return False
+        return 0 <= value <=1000000
+
+
+
+class GradientFrame(Canvas):
+    def __init__(self, parent, color1= cor1, color2 = cor2, **kwargs):
+        Canvas.__init__(self, parent, **kwargs)
+        self._color= color1
+        self._color2= color2
+        self.bind("<Configure>", self._draw_gradient)
+
+    def _draw_gradient(self, event= None):
+        self.delete("gradient")
+        width = self.winfo_width()
+        height = self.winfo_height()
+        limit = width
+        (r1,g1,b1) = self.winfo_rgb(self._color)
+        (r2, g2, b2) = self.winfo_rgb(self._color2)
+        r_ratio = float(r2-r1) / limit
+        g_ratio = float(g2-g1) / limit
+        b_ratio = float(b2-b1) / limit
+
+        for i in range(limit):
+            nr = int(r1 + (r_ratio * i))
+            ng = int(r1 + (g_ratio * i))
+            nb = int(r1 + (b_ratio * i))
+            color = "#%4.4x%4.4x%4.4x" % (nr, ng, nb)
+            self.create_line(i, 0, i, height, tags=("gradient",), fill=color)
+        self.lower("gradient")
 
 class Relatorios():
     def printCliente(self):
@@ -162,9 +198,10 @@ class Funcs():
         self.desconecta_bd()
 
 
-class Application(Funcs, Relatorios):
+class Application(Funcs, Relatorios, Validadores):
     def __init__(self):
         self.root = root
+        self.validaEntradas()
         self.tela()
         self.frames_da_tela()
         self.criando_botoes()
@@ -193,7 +230,7 @@ class Application(Funcs, Relatorios):
 
     def criando_botoes(self):
         self.abas = ttk.Notebook(self.frame_1)
-        self.aba1 = Frame(self.abas)
+        self.aba1 = GradientFrame(self.abas)
         self.aba2 = Frame(self.abas)
 
         self.aba1.configure(background=cor2)
@@ -231,10 +268,19 @@ class Application(Funcs, Relatorios):
                                 command=self.deleta_cliente)
         self.bt_apagar.place(relx=0.8, rely=0.1, relwidth=0.1, relheight=0.15)
 
+        self.bt_novajanela = Button(self.aba1, text="Nova Janela", bd=2.5, bg=cor1, fg='white', font=('verdana', 8, 'bold'),
+                                command=self.janela2)
+        self.bt_novajanela.place(relx=0.8, rely=0.5, relwidth=0.2, relheight=0.15)
+
+
+
+
+
+
         self.lb_codigo = Label(self.aba1, text="Código", bg=cor2, fg=cor1, font=('verdana', 9, 'bold'))
         self.lb_codigo.place(relx=0.05, rely=0.05)
 
-        self.codigo_entry = Entry(self.aba1)
+        self.codigo_entry = Entry(self.aba1, validate= "key", validatecommand= self.vcmd2)
         self.codigo_entry.place(relx=0.05, rely=0.15, relwidth=0.08)
 
         self.lb_nome = Label(self.aba1, text="Nome", bg=cor2, fg=cor1, font=('verdana', 9, 'bold'))
@@ -291,6 +337,16 @@ class Application(Funcs, Relatorios):
         filemenu2.add_command(label="Limpa Cliente", command=self.limpa_tela)
 
         filemenu2.add_command(label="Ficha do Cliente", command=self.gerarelatoriocliente)
-
+    def janela2(self):
+        self.root2 = Toplevel()
+        self.root.title("Janela 2")
+        self.root2.configure(background=cor2)
+        self.root2.geometry("400x200")
+        self.root2.resizable(False, False)
+        self.root2.transient(self.root)
+        self.root2.focus_force()
+        self.root2.grab_set()
+    def validaEntradas(self):
+        self.vcmd2 = (self.root.register(self.validate_entry2),"%P")
 
 Application()
