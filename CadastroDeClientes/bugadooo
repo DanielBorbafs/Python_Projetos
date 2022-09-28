@@ -1,0 +1,110 @@
+from tkinter import *
+from utils.helper import *
+from tkinter import messagebox
+
+
+root = Tk()
+
+
+def self(args):
+    pass
+
+
+class Application():
+    def __init__(self):
+        self.root = root
+        self.tela()
+        self.frames()
+        self.frame2()
+        self.Botoes()
+
+        root.mainloop()
+    def tela(self):
+        self.root.title("TELA DE LOGIN")
+        self.root.configure(bg="black")
+        self.root.geometry("620x500")
+        self.root.resizable(False, False)
+
+    def tela_dois(self):
+        self.root2 = Toplevel()
+        self.root2.title("Janela 2")
+        self.root2.configure(background='lightgray')
+        self.root2.geometry("620x500")
+        self.root2.resizable(False, False)
+        self.root2.transient(self.root)
+        self.root2.focus_force()
+        self.root2.grab_set()
+
+
+
+
+
+
+
+
+        menubar = Menu(self.root2)
+        self.root2.config(menu=menubar)
+        filemenu = Menu(menubar)
+        filemenu2 = Menu(menubar)
+        filemenu3 = Menu(menubar)
+        menubar.add_cascade(label="Opções", menu=filemenu)
+        menubar.add_cascade(label="Imprimir", menu=filemenu2)
+        menubar.add_cascade(label="Funções", menu=filemenu3)
+
+        filemenu.add_command(label="Cadastrar Colaborador")
+        filemenu.add_command(label="Consultar Cadastros")
+        filemenu.add_command(label="Cadastrar Produto")
+        filemenu.add_command(label="Consultar Estoque")
+        filemenu.add_command(label="Cadastrar Vendas")
+
+        filemenu2.add_command(label="Relatório de Vendas ")
+        filemenu2.add_command(label="Ficha de Colaborador")
+        filemenu2.add_command(label="Estoque de Produto")
+
+
+
+
+
+
+
+    def frames(self):
+        self.frame_login = Frame(root, width=800, height=800, bg='black')
+        self.frame_login.place(relx=0.00, rely=0.00, relwidth=1, relheight=1)
+        self.bemvindo_login = Label(self.frame_login, text="Olá,\n Seja bem vindo!", font=('inter 32 bold'), fg="white", bg="black")
+        self.bemvindo_login.place(x=110, y=50)
+
+        self.nome_login = Label(self.frame_login, text="login:", font=('inter 32 bold'), fg="white", bg="black")
+        self.nome_login.place(x=230, y=180)
+        self.entrada_login= Entry(self.frame_login, width=40, justify='left', font=("",15), highlightthickness=1, relief='solid')
+        self.entrada_login.place(x=90, y=245)
+
+        self.nome_senha = Label(self.frame_login, text="senha:", font=('inter 32 bold'), fg="white", bg="black")
+        self.nome_senha.place(x=230, y=280)
+        self.entrada_senha = Entry(self.frame_login, width=40, justify='left', font=("", 15), highlightthickness=1,
+                                   relief='solid', show='*')
+        self.entrada_senha.place(x=90, y=345)
+
+        self.bemvindo_login.place(x=110, y=50)
+
+    def frame2(self):
+        self.frame_teladois = Frame(self.root2, width=800, height=800, bg='black')
+        self.frame_teladois.place(relx=0.00, rely=0.00, relwidth=1, relheight=1)
+        self.bemvindo_login = Label(self.frame_teladois, text="Olá,\n Seja bem vindo!", font=('inter 32 bold'), fg="white", bg="black")
+        self.bemvindo_login.place(x=110, y=50)
+
+    def Botoes(self):
+        btn_entrar = Button(self.frame_login, text='Entrar', command=self.verifica_senha,anchor=NW, activebackground='lightblue',bd=2,width=5, height=1, font=('inter 20 bold'), fg="white", bg="gray", relief='raised')
+        btn_entrar.place(x=238, y=400)
+    def verifica_senha(self):
+        credenciais = ['Dan', '157820']
+        nome = self.entrada_login.get()
+        senha = self.entrada_senha.get()
+        if nome =='admin' and senha =='admin':
+            self.tela_dois()
+        elif credenciais[0] == nome and credenciais[1] ==senha:
+            messagebox.showinfo('Login', 'Seja Bem Vindo de volta!' +credenciais[0])
+        else:
+            messagebox.showwarning('Erro', 'Senha incorreta')
+
+
+Application()
