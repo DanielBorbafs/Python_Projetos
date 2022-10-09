@@ -1,0 +1,87 @@
+from tkinter import *
+from tkinter import ttk
+import mysql
+from utils.helper import *
+from utils.helper import frame_sistema
+root = Tk()
+
+class Application():
+    def __init__(self):
+        self.root = root
+        self.tela()
+        self.frame_sistema()
+        self.abas()
+        self.botoes()
+        self.labels()
+        root.mainloop()
+    def tela(self):
+        self.root.title("Cadastro de Clientes")
+        self.root.configure(bg=CorBG1)
+        self.root.geometry("700x500")
+        self.root.resizable(True, True)
+        self.root.maxsize(width=900, height=700)
+        self.root.minsize(width=600, height=500)
+    def frame_sistema(self):
+        self.frame_conteudo = Frame(self.root, bg=CorBG1)
+        self.frame_conteudo.place(relx=0.01, rely=0.07, relwidth=0.99, relheight= 0.89)
+        self.frame_aba = Frame(self.root, bg='white')
+        self.frame_aba.place(relx=0.01, rely=0.01, relwidth=0.98, relheight= 0.04)
+
+    def botoes(self):
+        self.bt_limpar = Button(self.aba1, bg=CorLabel1, text='Limpar', font='Kreon, 18', fg='white', bd=2)
+        self.bt_limpar.place(relx=0.1, rely=0.82, relwidth=0.2, relheight=0.08)
+
+        self.bt_cadastrar = Button(self.aba1, bg=CorLabel1, text='Cadastrar', font='Kreon, 18', fg='white', bd=2)
+        self.bt_cadastrar.place(relx=0.55, rely=0.82, relwidth=0.2, relheight=0.08)
+
+    def labels(self):
+        self.lb_matricula = Label(self.aba1, text="   Matricula   ", font='Kreon, 18', bg=CorLabel1, fg='white')
+        self.lb_matricula.place(relx=0.1, rely=0.14)
+        self.matricula_entry = Entry(self.aba1)
+        self.matricula_entry.place(relx=0.1, rely=0.22, relwidth=0.21, relheight=0.05)
+
+        self.lb_cep = Label(self.aba1, text="      CEP       ", font='Kreon, 18', bg=CorLabel1,
+                                         fg='white')
+        self.lb_cep.place(relx=0.1, rely=0.36)
+        self.cep_entry = Entry(self.aba1)
+        self.cep_entry.place(relx=0.1, rely=0.44, relwidth=0.21, relheight=0.05)
+
+        self.lb_numero = Label(self.aba1, text="   Número     ", font='Kreon, 18', bg=CorLabel1,
+                                         fg='white')
+        self.lb_numero.place(relx=0.1, rely=0.57)
+        self.numero_entry = Entry(self.aba1)
+        self.numero_entry.place(relx=0.1, rely=0.65, relwidth=0.21, relheight=0.05)
+
+        self.lb_nome = Label(self.aba1, text="    Nome do Colaborador     ", font='Kreon, 18', bg=CorLabel1,
+                               fg='white')
+        self.lb_nome.place(relx=0.45, rely=0.14)
+        self.nome_entry = Entry(self.aba1)
+        self.nome_entry.place(relx=0.45, rely=0.22, relwidth=0.44, relheight=0.05)
+
+        self.lb_nome = Label(self.aba1, text="             Endereço               ", font='Kreon, 18', bg=CorLabel1,
+                             fg='white')
+        self.lb_nome.place(relx=0.45, rely=0.36)
+        self.nome_entry = Entry(self.aba1)
+        self.nome_entry.place(relx=0.45, rely=0.44, relwidth=0.44, relheight=0.05)
+
+        self.lb_telefone = Label(self.aba1, text="             Telefone               ", font='Kreon, 18',
+                             bg=CorLabel1,
+                             fg='white')
+        self.lb_telefone.place(relx=0.45, rely=0.57)
+        self.telefone_entry = Entry(self.aba1)
+        self.telefone_entry.place(relx=0.45, rely=0.65, relwidth=0.43, relheight=0.05)
+
+    def abas(self):
+        self.abas = ttk.Notebook(self.frame_conteudo)
+        self.aba1 = Frame(self.abas)
+        self.aba2 = Frame(self.abas)
+
+        self.aba1.configure(background=CorBG1)
+        self.aba2.configure(background='white')
+
+        self.abas.add(self.aba1, text="Cadastro de Clientes")
+        self.abas.add(self.aba2, text="Consulta de Clientes")
+
+        self.abas.place(relx=0.0, rely=0.0, relwidth=0.99, relheight=0.99)
+
+Application()
